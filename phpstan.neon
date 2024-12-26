@@ -1,17 +1,30 @@
-includes:
-    - vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
-    #level: max
-    level: 5
+    editorUrl: 'vscode://file/%%file%%:%%line%%'
+    level: 2 # Increase until "max"
     paths:
-        - lib/
+        - src/
     scanFiles:
-        # Plugin stubs
-        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
-    bootstrapFiles:
         - tests/phpstan/bootstrap.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+        - vendor/php-stubs/acf-pro-stubs/acf-pro-stubs.php
+    excludePaths:
+        - rector.php
+        - tests/*
+        - docs/*
     ignoreErrors:
+        - '#Result of function acf_get_field_type \(void\) is used.#'
+        - '#Instantiated class Twig\\CacheExtension\\CacheStrategy\\GenerationalCacheStrategy not found.#'
+        - '#Instantiated class Twig\\CacheExtension\\Extension not found.#'
+        - '#Method Timber\\Loader::_get_cache_extension\(\) has invalid return type Twig\\CacheExtension\\Extension.#'
         # Uses func_get_args()
+        - '#^Function remove_filter invoked with [3456] parameters, 2-3 required\.$#'
         - '#^Function apply_filters invoked with [3456] parameters, 2 required\.$#'
-        # TODO Do not create a static instance of a non-final class.
-        - '#^Unsafe usage of new static\(\)\.$#'
+        # ACF
+        - '#Access to an undefined property ACF::\$fields\.#'
+    #     # TODO Do not create a static instance of a non-final class.
+    #     - '#^Unsafe usage of new static\(\)\.$#'
+services:
+    -
+        class: TimberPHPStan\WPNavMenuItemPost
+        tags:
+            - phpstan.broker.propertiesClassReflectionExtension

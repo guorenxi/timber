@@ -4,7 +4,7 @@ title: "Image Cookbook"
 
 Timber makes it damn easy to use an image in a tag.
 
-Automatically, Timber will interpret images attached to a post’s thumbnail field ("Featured Image" in the admin) and treat them as instances of [Timber\Image](https://timber.github.io/docs/reference/timber-image/). Then, in your Twig templates, you can access them via `{{ post.thumbnail }}`.
+Automatically, Timber will interpret images attached to a post’s thumbnail field ("Featured Image" in the admin) and treat them as instances of [Timber\Image](https://timber.github.io/docs/v1/reference/timber-image/). Then, in your Twig templates, you can access them via `{{ post.thumbnail }}`.
 
 ## Basic image stuff
 
@@ -26,7 +26,7 @@ Note: If the WordPress size (e.g `medium`) has not been generated, it will retur
 
 ## Arbitrary resizing of images
 
-Want to resize an image? Here we’re going to use [Twig Filters](http://twig.symfony.com/doc/filters/index.html).
+Want to resize an image? Here we’re going to use [Twig Filters](https://twig.symfony.com/doc/filters/index.html).
 
 ```twig
 <img src="{{ post.thumbnail.src|resize(300, 200) }}" />
@@ -40,7 +40,7 @@ The first parameter is `width`, the second is `height` (optional). So if you don
 
 All of these filters are written specifically to interact with WordPress’s image API. So don’t worry, no weird TimThumb stuff going on—this is all using WordPress’s internal image sizing stuff.
 
-Be aware of the limitations of this function [when working with a CDN](https://timber.github.io/docs/guides/cookbook-images/#limitations-when-working-with-a-cdn).
+Be aware of the limitations of this function [when working with a CDN](https://timber.github.io/docs/v1/guides/cookbook-images/#limitations-when-working-with-a-cdn).
 
 ## Letterboxing images
 
@@ -95,7 +95,7 @@ Unfortunately, it’s not possible to use the `|retina()` filter in combination 
 
 ## Using images in custom fields
 
-Let’s say you're using a custom field plugin (like the amazing [Advanced Custom Fields](http://www.advancedcustomfields.com/)). You can use the resulting images in your Twig templates very easily.
+Let’s say you're using a custom field plugin (like the amazing [Advanced Custom Fields](https://www.advancedcustomfields.com/)). You can use the resulting images in your Twig templates very easily.
 
 When setting up your custom fields you’ll want to save the `image_id` to the field. The image object, url, etc. _will_ work but it’s not as fool-proof.
 
@@ -137,7 +137,7 @@ You can now use all the above functions to transform your custom images in the s
 ## Limitations when working with a CDN
 
 Timber’s image functions may be somewhat limited when using a CDN.
-There are [differences between Pull CDN and Push CDN](https://cdn.net/push-vs-pull-cdn/).
+There are [differences between Pull CDN and Push CDN](https://medium.com/@ajin.sunny/push-cdn-vs-pull-cdn-a13145df5e13).
 
 ### Using a Pull CDN
 

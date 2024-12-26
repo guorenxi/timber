@@ -27,7 +27,7 @@ Note: If the WordPress size (e.g `medium`) has not been generated, it will retur
 
 ## Arbitrary resizing of images
 
-Want to resize an image? Here we’re going to use [Twig Filters](http://twig.symfony.com/doc/filters/index.html).
+Want to resize an image? Here we’re going to use [Twig Filters](https://twig.symfony.com/doc/filters/index.html).
 
 ```twig
 <img src="{{ post.thumbnail.src|resize(300, 200) }}" />
@@ -95,7 +95,7 @@ Unfortunately, it’s not possible to use the `|retina()` filter in combination 
 
 ## Using images in custom fields
 
-Let’s say you're using a custom field plugin (like the amazing [Advanced Custom Fields](http://www.advancedcustomfields.com/)). You can use the resulting images in your Twig templates very easily.
+Let’s say you're using a custom field plugin (like the amazing [Advanced Custom Fields](https://www.advancedcustomfields.com/)). You can use the resulting images in your Twig templates very easily.
 
 When setting up your custom fields you’ll want to save the `image_id` to the field. The image object, url, etc. _will_ work but it’s not as fool-proof.
 
@@ -114,19 +114,17 @@ This is where we’ll start in PHP.
 **single.php**
 
 ```php
-<?php
-
 $post = Timber::get_post();
 
-if ( isset( $post->hero_image ) && strlen( $post->hero_image ) ) {
-    $post->hero_image = Timber::get_image( $post->hero_image );
+if (isset($post->hero_image) && strlen($post->hero_image)) {
+    $post->hero_image = Timber::get_image($post->hero_image);
 }
 
-$data = Timber::context( [
-    'post' => $post
-] );
+$data = Timber::context([
+    'post' => $post,
+]);
 
-Timber::render( 'single.twig', $data );
+Timber::render('single.twig', $data);
 ```
 
 `Timber\Image` should be initialized using a WordPress image ID. It can also take URLs and image objects, but that requires extra processing.
@@ -146,7 +144,7 @@ External images (we call them sideloaded images) are loaded into an **external**
 ## Limitations when working with a CDN
 
 Timber’s image functions may be somewhat limited when using a CDN.
-There are [differences between Pull CDN and Push CDN](https://cdn.net/push-vs-pull-cdn/).
+There are [differences between Pull CDN and Push CDN](https://medium.com/@ajin.sunny/push-cdn-vs-pull-cdn-a13145df5e13).
 
 ### Using a Pull CDN
 

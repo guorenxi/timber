@@ -46,9 +46,9 @@ Warning: this one will take a while.
 Copy `/wordpress-trunk/public_html/wp-tests-config-sample.php` to `/wordpress-trunk/public_html/wp-tests-config.php`. Assuming you're using VVV's defaults, we just need to specify how to access the database:
 
 ```php
-define( 'DB_NAME', 'wordpress_unit_tests' );
-define( 'DB_USER', 'root' );
-define( 'DB_PASSWORD', 'root' );
+define('DB_NAME', 'wordpress_unit_tests');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'root');
 ```
 
 ### 5. Install WordPress tests
@@ -88,7 +88,7 @@ $ composer install
 $ phpunit
 ```
 
-You should see a bunch of gobbledygook across your screen (the whole process will take about 4 mins.), but we should see that WordPress is testing successfully. Hurrah! For more info, check out the [Handbook on Automated Testing](http://make.wordpress.org/core/handbook/automated-testing/).
+You should see a bunch of gobbledygook across your screen (the whole process will take about 4 mins.), but we should see that WordPress is testing successfully. Hurrah! For more info, check out the [Handbook on Automated Testing](https://make.wordpress.org/core/handbook/automated-testing/).
 
 ### Writing tests
 

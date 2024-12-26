@@ -1,6 +1,7 @@
 ---
 title: "Installation"
 order: "10"
+permalink: "/v2/installation/installation/"
 ---
 
 You can install Timber through [Composer](https://getcomposer.org/download/). If you’re not familiar with Composer yet, read [our short introduction](https://timber.github.io/docs/v2/installation/intro-to-composer/) and then come back here.
@@ -25,8 +26,6 @@ You can choose yourself where in your project you want to include Timber.
 If your theme or project is not already set up to pull in Composer’s autoload file, you will need to add the following line at the top of your **functions.php** file:
 
 ```php
-<?php
-
 // Load Composer dependencies.
 require_once __DIR__ . '/vendor/autoload.php';
 

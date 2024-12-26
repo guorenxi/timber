@@ -39,7 +39,7 @@ Consider this array with a key that has a dash in it:
 
 ```php
 $item = [
-    'id'          => 7,
+    'id' => 7,
     'has-balcony' => true,
 ];
 ```
@@ -201,9 +201,10 @@ If you want anything from the template’s context, you'll need to pass that man
 **functions.php**
 
 ```php
-add_action( 'my_action_with_args', 'my_function_with_args', 10, 2 );
+add_action('my_action_with_args', 'my_function_with_args', 10, 2);
 
-function my_function_with_args( $foo, $post ){
+function my_function_with_args($foo, $post)
+{
     echo 'I say ' . $foo . '!';
     echo 'For the post with title ' . $post->title();
 }
@@ -236,10 +237,11 @@ Or you can use a filter with the [Twig apply tag](https://twig.symfony.com/doc/3
 In **PHP**, you can get the content of the block with the first parameter and the rest of parameters like that.
 
 ```php
-add_filter( 'default_message', 'my_default_message', 10, 4 );
+add_filter('default_message', 'my_default_message', 10, 4);
 
-function my_default_message( $tag, $param1, $param2, $param3 ) {
-    var_dump( $tag, $param1, $param2, $param3 ); // 'I love pizza', 'foo', 'bar, 'baz'
+function my_default_message($tag, $param1, $param2, $param3)
+{
+    var_dump($tag, $param1, $param2, $param3); // 'I love pizza', 'foo', 'bar, 'baz'
 
     echo 'I have a message: ' . $tag; // I have a message: I love pizza
 }
@@ -253,8 +255,8 @@ Sometimes in **WooCommerce** we find very long lines of code:
 echo '<li class="woocommerce-notice woocommerce-notice--info woocommerce-info">' . apply_filters(
     'woocommerce_no_available_payment_methods_message',
     WC()->customer->get_billing_country()
-        ? esc_html__( 'Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce' )
-        : esc_html__( 'Please fill in your details above to see available payment methods.', 'woocommerce' )
+        ? esc_html__('Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce')
+        : esc_html__('Please fill in your details above to see available payment methods.', 'woocommerce')
 ) . '</li>';
 ```
 
@@ -325,9 +327,9 @@ And then, we pass it to Twig, where we use Twig’s own [`template_to_string()`]
 ### Text editor add-ons
 
 * Text Mate & Sublime text bundle – [Anomareh's PHP-Twig](https://github.com/Anomareh/PHP-Twig.tmbundle)
-* Emacs – [Web Mode](http://web-mode.org/)
+* Emacs – [Web Mode](https://web-mode.org/)
 * Geany – Add [Twig/Symfony2 detection and highlighting](https://wiki.geany.org/howtos/geany_and_django#twigsymfony2_support)
-* PhpStorm – Built in coloring and code hinting. The Twig extension is recognized and has been for some time. [Twig Details for PhpStorm](http://blog.jetbrains.com/phpstorm/2013/06/twig-support-in-phpstorm/).
+* PhpStorm – Built in coloring and code hinting. The Twig extension is recognized and has been for some time. [Twig Details for PhpStorm](https://blog.jetbrains.com/phpstorm/2013/06/twig-support-in-phpstorm/).
 * Atom – Syntax highlighting with the [Atom Component](https://atom.io/packages/php-twig).
 
 ### WordPress tools
@@ -336,9 +338,9 @@ And then, we pass it to Twig, where we use Twig’s own [`template_to_string()`]
 
 ### Other
 
-* [Watson-Ruby](http://nhmood.github.io/watson-ruby/) – An inline issue manager. Put tags like `[todo]` in a Twig comment and find it easily later. Watson supports Twig as of version 1.6.3.
+* [Watson-Ruby](https://nhmood.github.io/watson-ruby/) – An inline issue manager. Put tags like `[todo]` in a Twig comment and find it easily later. Watson supports Twig as of version 1.6.3.
 
 ### JavaScript
 
 * [Twig.js](https://github.com/justjohn/twig.js) – Use those `.twig` files in the Javascript and AJAX components of your site.
-* [Nunjucks](http://mozilla.github.io/nunjucks/) – Another JS template language that is also based on [Jinja2](http://jinja.pocoo.org/docs/)
+* [Nunjucks](https://mozilla.github.io/nunjucks/) – Another JS template language that is also based on [Jinja2](https://jinja.pocoo.org/docs/)

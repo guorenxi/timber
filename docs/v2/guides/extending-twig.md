@@ -1,11 +1,15 @@
 ---
-title: "Extending Timber"
+title: "Extending Twig"
 order: "1650"
 ---
 
 ## Twig Environment
 
-Timber abstracts some of that functionality for you, so you can add functions or filters more easily.
+Twig has a `\Twig\Environment` class that you can [use to extend Twig](https://twig.symfony.com/doc/3.x/advanced.html). One of the most common ways this is used is to add [functions](https://twig.symfony.com/doc/3.x/advanced.html#functions) and [filters](https://twig.symfony.com/doc/3.x/advanced.html#filters) to Twig. But it could also be used to add globals, extensions, and more.
+
+Timber creates a `\Twig\Environment` object for you. You can use the `timber/twig` filter to access that object and extend Twig through it.
+
+Timber further abstracts some of that functionality for you, so you can add functions or filters more easily.
 
 ## Functions
 
@@ -16,13 +20,13 @@ By default, you’ll have to use `{{ fn('function_name') }}` to call a function 
 **functions.php**
 
 ```php
-add_filter( 'timber/twig/functions', function( $functions ) {
+add_filter('timber/twig/functions', function ($functions) {
     $functions['edit_post_link'] = [
         'callable' => 'edit_post_link',
     ];
 
     return $functions;
-} );
+});
 ```
 
 The `$functions` variable is an array of functions that Timber already adds by default.
@@ -50,11 +54,11 @@ Timber already comes with a list of functions it adds by default. If you want to
 **functions.php**
 
 ```php
-add_filter( 'timber/twig/functions', function( $functions ) {
-    var_dump( $functions );
+add_filter('timber/twig/functions', function ($functions) {
+    var_dump($functions);
 
     return $functions;
-} );
+});
 ```
 
 ### Changing functions
@@ -62,17 +66,17 @@ add_filter( 'timber/twig/functions', function( $functions ) {
 You can replace a function with your own function or even remove a function by updating the array items in `$functions`.
 
 ```php
-add_filter( 'timber/twig/filters', function( $functions ) {
+add_filter('timber/twig/functions', function ($functions) {
     // Replace a function.
     $functions['get_image'] = [
         'callable' => 'custom_get_image',
     ];
 
     // Remove a function.
-    unset( $filters['get_image'] );
+    unset($functions['get_image']);
 
-    return $filters;
-} );
+    return $functions;
+});
 ```
 
 ### function_wrapper
@@ -88,7 +92,7 @@ Here’s an example where we add our own `|price` filter. We pass the name of th
 **functions.php**
 
 ```php
-add_filter( 'timber/twig/filters', function( $filters ) {
+add_filter('timber/twig/filters', function ($filters) {
     // Add your own filters.
     $filters['price'] = [
         'callable' => 'format_price',
@@ -99,7 +103,7 @@ add_filter( 'timber/twig/filters', function( $filters ) {
     ];
 
     return $filters;
-} );
+});
 ```
 
 In Twig, we can then use it like this:
@@ -115,11 +119,11 @@ In Twig, we can then use it like this:
 You could use the same filter to dump a list of all available filters for debugging:
 
 ```php
-add_filter( 'timber/twig/filters', function( $filters ) {
-    var_dump( $filters );
+add_filter('timber/twig/filters', function ($filters) {
+    var_dump($filters);
 
     return $filters;
-} );
+});
 ```
 
 ### Changing filters
@@ -127,17 +131,17 @@ add_filter( 'timber/twig/filters', function( $filters ) {
 You can replace a filter with your own function or even remove a filter by updating the array items in `$filters`.
 
 ```php
-add_filter( 'timber/twig/filters', function( $filters ) {
+add_filter('timber/twig/filters', function ($filters) {
     // Replace a filter.
     $filters['list'] = [
         'callable' => 'custom_list_filter',
     ];
 
     // Remove a filter.
-    unset( $filters['list'] );
+    unset($filters['list']);
 
     return $filters;
-} );
+});
 ```
 
 ## Adding functionality with the Twig Environment filter
@@ -149,15 +153,15 @@ Here’s the same functions and filters that we add above. But instead of using 
 ```php
 add_filter( 'timber/twig', function( \Twig\Environment $twig ) {
     $twig->addFunction(
-        new TwigFunction( 'edit_post_link', 'edit_post_link' )
+        new \Twig\TwigFunction( 'edit_post_link', 'edit_post_link' )
     );
 
     $twig->addFilter(
-        new TwigFilter( 'price', 'format_price' )
+        new \Twig\TwigFilter( 'price', 'format_price' )
     );
 
     $twig->addFilter(
-        new TwigFilter( 'slugify', 'sanitize_title' )
+        new \Twig\TwigFilter( 'slugify', 'sanitize_title' )
     ];
 
     return $twig;
