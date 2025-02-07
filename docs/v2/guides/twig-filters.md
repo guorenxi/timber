@@ -5,7 +5,7 @@ order: "220"
 
 ## General Filters
 
-Twig offers a variety of [filters](http://twig.symfony.com/doc/filters/index.html) to transform text and other information into the desired output. In addition, Timber has added some valuable custom filters for your WordPress theme:
+Twig offers a variety of [filters](https://twig.symfony.com/doc/filters/index.html) to transform text and other information into the desired output. In addition, Timber has added some valuable custom filters for your WordPress theme:
 
 ## `array`
 
@@ -17,7 +17,7 @@ Makes sure a variable is an array to safely loop over it without running into an
 $things = 'thing';
 
 // Or
-$things = [ 'thing', 'thang' ];
+$things = ['thing', 'thang'];
 ```
 
 **Twig**
@@ -92,7 +92,7 @@ The `|function` filter is deprecated. Use `function()` instead. You can read mor
 Converts an absolute URL into a relative one, for example:
 
 ```twig
-My custom link is <a href="{{ 'http://example.org/2015/08/my-blog-post'|relative }}">here!</a>
+My custom link is <a href="{{ 'https://example.org/2015/08/my-blog-post'|relative }}">here!</a>
 ```
 
 ```html
@@ -215,11 +215,11 @@ Converts an array of strings into a comma-separated list.
 **PHP**
 
 ```php
-$context['contributors'] = array(
+$context['contributors'] = [
     'Blake Allen',
     'Rachel White',
-    'Maddy May'
-);
+    'Maddy May',
+];
 ```
 
 **Twig**

@@ -2,7 +2,7 @@
 title: "Advanced Custom Fields"
 ---
 
-Timber is designed to play nicely with the amazing [Advanced Custom Fields](http://www.advancedcustomfields.com/) plugin.
+Timber is designed to play nicely with the amazing [Advanced Custom Fields](https://www.advancedcustomfields.com/) plugin.
 
 ## Getting data from ACF
 
@@ -17,8 +17,53 @@ If you’ve worked with ACF before, you’re use to use `get_field( 'my_acf_fiel
 **PHP**
 
 ```php
-$meta = $post->meta( 'my_acf_field' );
+$meta = $post->meta('my_acf_field');
 ```
+
+### Transform values to Timber/PHP objects
+Timber by default returns all field values as is based on the return type set in your ACF field setting.
+
+But sometimes you might want to transform values directly into Timber/PHP objects. For example, if you have a relationship field, you might want to transform the values directly into `Timber\Post` objects.
+
+You can do so using the `timber/meta/transform_value` filter:
+
+**functions.php**
+```php
+add_filter('timber/meta/transform_value', '__return_true');
+```
+
+Or you can use the `transform_value` parameter to transform values on a field by field basis:
+
+**Twig**
+
+```twig
+{{ post.meta('my_acf_field', { transform_value: true }) }}
+```
+
+**PHP**
+
+```php
+$meta = $post->meta('my_meta_field', ['transform_value' => true]);
+```
+
+You can also use both the filter and parameter options at the same time to globally transform values and then opt-out on a field by field basis by setting `transform_value` to `false`.
+
+The values of the following field types will be transformed into Timber/PHP objects when using transforms:
+
+| Field type | Returns  |
+|---------|---------|
+| File    | `Timber\Attachment`         |
+| Image    | `Timber\Image`         |
+| Gallery    | array of `Timber\Post` objects         |
+| Date picker     |  `DateTimeImmutable`       |
+| Date time picker     |  `DateTimeImmutable`       |
+| Post object     | array of `Timber\Post` objects         |
+| Relationship     | array of `Timber\Post` objects         |
+| Taxonomy     | array of `Timber\Term` objects         |
+| User     | array of `Timber\User` objects         |
+
+
+
 
 ### Unformatted values
 
@@ -33,9 +78,9 @@ In ACF, all values are filtered. If you want to use unfiltered, raw values from 
 **PHP**
 
 ```php
-$meta = $post->meta( 'my_acf_field', [
+$meta = $post->meta('my_acf_field', [
     'format_value' => false,
-] );
+]);
 ```
 
 You can also use the **faster `raw_meta()` method**, which accesses values directly from the database and bypasses any ACF filters:
@@ -77,13 +122,9 @@ This is where we’ll start in PHP.
 ```php
 $post = Timber::get_post();
 
-if (isset($post->hero_image) && strlen($post->hero_image)){
-    $post->hero_image = Timber::get_image( $post->hero_image );
-}
-
-$context = Timber::context( [
+$context = Timber::context([
     'post' => $post,
-] );
+]);
 
 Timber::render('single.twig', $context);
 ```
@@ -93,7 +134,9 @@ Timber::render('single.twig', $context);
 You can now use all the above functions to transform your custom images in the same way, the format will be:
 
 ```twig
-<img src="{{ post.hero_image.src | resize(500, 300) }}" />
+{% if post.meta('hero_image') %}
+    <img src="{{ get_image(post.meta('hero_image')).src | resize(500, 300) }}" />
+{% endif %}
 ```
 
 ## Gallery Field
@@ -124,7 +167,7 @@ or
 The post data returned from a relationship field will not contain the Timber methods needed for easy handling inside of your Twig file. To get these, you’ll need to convert them into proper `Timber\Post` objects using `get_posts()`:
 
 ```twig
-{% for item in get_posts(post.relationship_field) %}
+{% for item in get_posts(post.meta('relationship_field')) %}
    {{ item.title }}
    {# Do something with item #}
 {% endfor %}
@@ -201,7 +244,7 @@ Similar to repeaters, get the field by the name of the flexible content field:
         <p class="caption">{{ get_image(media_item.image).caption }}</p>
         <aside class="notes">{{ media_item.notes }}</aside>
     {% elseif media_item.acf_fc_layout == 'video_set' %}
-        <iframe width="560" height="315" src="http://www.youtube.com/embed/{{media_item.youtube_id}}" frameborder="0" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{media_item.youtube_id}}" frameborder="0" allowfullscreen></iframe>
         <p class="caption">{{ media_item.caption }}</p>
     {% endif %}
 {% endfor %}
@@ -261,7 +304,7 @@ To prevent errors with include files that can’t be found, you can optionally u
 **PHP**
 
 ```php
-$context['site_copyright_info'] = get_field( 'copyright_info', 'options' );
+$context['site_copyright_info'] = get_field('copyright_info', 'options');
 
 Timber::render('index.twig', $context);
 ```
@@ -275,9 +318,9 @@ Timber::render('index.twig', $context);
 ### Get all info from your options page
 
 ```php
-$context['options'] = get_fields( 'options' );
+$context['options'] = get_fields('options');
 
-Timber::render( 'index.twig', $context );
+Timber::render('index.twig', $context);
 ```
 
 ACF Pro has a built in options page, and changes the `get_fields( 'options' )` to `get_fields( 'option' )`.
@@ -291,7 +334,7 @@ ACF Pro has a built in options page, and changes the `get_fields( 'options' )` t
 To use any options fields site wide, add the `option` context to your **functions.php** file:
 
 ```php
-add_filter( 'timber/context', 'global_timber_context' );
+add_filter('timber/context', 'global_timber_context');
 
 /**
  * Filters global context.
@@ -299,8 +342,9 @@ add_filter( 'timber/context', 'global_timber_context' );
  * @param array $context An array of existing context variables.
  * @return mixed
  */
-function global_timber_context( $context ) {
-    $context['options'] = get_fields( 'option' );
+function global_timber_context($context)
+{
+    $context['options'] = get_fields('option');
 
     return $context;
 }
@@ -321,7 +365,7 @@ You can grab specific field label data like so:
 **single.php**
 
 ```php
-$context['acf'] = get_field_objects( $data['post']->ID );
+$context['acf'] = get_field_objects($data['post']->ID);
 ```
 
 ```twig

@@ -19,17 +19,17 @@ If you're using the [Timber Starter Theme](https://github.com/timber/starter-the
 In the **page.php** file you'll find this code:
 
 ```php
-Timber::render( array(
+Timber::render([
     'page-' . $post->post_name . '.twig',
-    'page.twig'
-), $context );
+    'page.twig',
+], $context);
 ```
 
 This is telling PHP to first look for a Twig file named **page-{{ slug }}.twig** and then fall back to **page.twig** if that doesn't exist. With the array notation, you can add as many fallbacks as you need.
 
 ## Custom PHP File
 
-If you need to do something special for a page in PHP, you can use the standard WordPress [template hierarchy](http://codex.wordpress.org/Template_Hierarchy) to gather and manipulate data for this page. In the example above, you would create a file
+If you need to do something special for a page in PHP, you can use the standard WordPress [template hierarchy](https://codex.wordpress.org/Template_Hierarchy) to gather and manipulate data for this page. In the example above, you would create a file
 
 **/wp-content/themes/my-theme/page-about-us.php**
 
@@ -40,7 +40,6 @@ and populate it with the necessary PHP. You can use the contents of the starter 
 Create a file with the following comment header:
 
 ```php
-<?php
 /**
  * Template Name: My Custom Page
  * Description: A Page Template with a darker design.
@@ -51,7 +50,7 @@ Create a file with the following comment header:
 
 In the WordPress admin, a new entry will be added in your page’s list of available templates like so:
 
-![](http://codex.wordpress.org/images/thumb/a/a3/page-templates-pulldown-screenshot.png/180px-page-templates-pulldown-screenshot.png)
+![](https://codex.wordpress.org/images/thumb/a/a3/page-templates-pulldown-screenshot.png/180px-page-templates-pulldown-screenshot.png)
 
 * Name it something like **/wp-content/themes/my-theme/template-my-custom-page.php**.
-* Do **NOT** name it something beginning with `page-` or [WordPress will get very confused](http://jespervanengelen.com/page-templates-in-wordpress-template-hierarchy/).
+* Do **NOT** prefix the filename with `page-` or WordPress will get very confused due to [WordPress template hierarchy](https://developer.wordpress.org/themes/basics/template-hierarchy/#single-page).

@@ -6,7 +6,7 @@ Timber, especially in conjunction with WordPress and Twig, offers a variety of c
 
 ## tl;dr
 
-In my tests with Debug Bar, Timber has no measurable performance hit. Everything compiles to PHP. @fabpot has an [overview of the performance costs on his blog](http://fabien.potencier.org/article/34/templating-engines-in-php) (scroll down to the table).
+In my tests with Debug Bar, Timber has no measurable performance hit. Everything compiles to PHP. @fabpot has an [overview of the performance costs on his blog](https://fabien.potencier.org/article/34/templating-engines-in-php) (scroll down to the table).
 
 
 ## Cache Everything
@@ -15,7 +15,7 @@ You can still use plugins like [W3 Total Cache](https://wordpress.org/plugins/w3
 
 ## Cache the Entire Twig File and Data
 
-When rendering, use the `$expires` argument in [`Timber::render`](https://timber.github.io/docs/reference/timber/#render). For example:
+When rendering, use the `$expires` argument in [`Timber::render`](https://timber.github.io/docs/v1/reference/timber/#render). For example:
 
 ```php
 <?php
@@ -29,7 +29,7 @@ This method is very effective, but crude - the whole template is cached. So if y
 
 ### Set cache mode
 
-As a fourth parameter for [Timber::render()](https://timber.github.io/docs/reference/timber/#render), you can set the `$cache_mode`.
+As a fourth parameter for [Timber::render()](https://timber.github.io/docs/v1/reference/timber/#render), you can set the `$cache_mode`.
 
 ```php
 <?php
@@ -106,9 +106,9 @@ This does not cache the _contents_ of the variables. This is recommended as a la
 
 ## Cache the PHP data
 
-Sometimes the most expensive parts of the operations are generating the data needed to populate the twig template. You can of course use WordPress’s default [Transient API](http://codex.wordpress.org/Transients_API) to store this data.
+Sometimes the most expensive parts of the operations are generating the data needed to populate the twig template. You can of course use WordPress’s default [Transient API](https://codex.wordpress.org/Transients_API) to store this data.
 
-You can also use some [syntactic sugar](http://en.wikipedia.org/wiki/Syntactic_sugar) to make the checking/saving/retrieving of transient data a bit easier:
+You can also use some [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar) to make the checking/saving/retrieving of transient data a bit easier:
 
 **home.php**
 

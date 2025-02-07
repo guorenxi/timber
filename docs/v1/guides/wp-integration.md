@@ -18,7 +18,7 @@ This differs from `{{ post.post_content }}`, which will display the raw text sto
 
 ## Hooks
 
-Timber hooks to interact with WordPress use `this/style/of_hooks` instead of `this_style_of_hooks`. This matches the same methodology as [Advanced Custom Fields](http://www.advancedcustomfields.com/resources/#actions).
+Timber hooks to interact with WordPress use `this/style/of_hooks` instead of `this_style_of_hooks`. This matches the same methodology as [Advanced Custom Fields](https://www.advancedcustomfields.com/resources/#actions).
 
 Full documentation to come.
 
@@ -70,7 +70,7 @@ Please note the argument count that WordPress requires for `add_action`.
 
 ## Filters
 
-Timber already comes with a [set of useful filters](/docs/guides/filters/). If you have your own WordPress filters that you want to easily apply in Twig, you can use `apply_filters`.
+Timber already comes with a [set of useful filters](https://timber.github.io/docs/v1/guides/filters/). If you have your own WordPress filters that you want to easily apply in Twig, you can use `apply_filters`.
 
 ```twig
 {{ post.content|apply_filters('default_message') }}

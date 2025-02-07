@@ -77,7 +77,7 @@ If you look at **single.twig** again, you see opening and closing block declarat
 
 Twig will take the content inside the `{% block %}` tag and put it where you defined your block in **base.twig**. Everything in between `{% block content %}` and `{% endblock %}` in your **single.twig** will go into your `<main>` tag in your **base.twig**.
 
-Blocks are one of the most important and powerful concepts in managing your templates. The official [Twig Documentation](http://twig.symfony.com/doc/templates.html#template-inheritance) has more details.
+Blocks are one of the most important and powerful concepts in managing your templates. The official [Twig Documentation](https://twig.symfony.com/doc/templates.html#template-inheritance) has more details.
 
 While you can define your own custom number of blocks, you can also create any number of base files to extend from (we use the name "base" as a naming convention, but it’s not required).
 
@@ -101,11 +101,11 @@ For this introduction, let’s assume that the name of the page is "All about Ja
             {% block headline %}
                 <header>
                     <h1 class="article-title">{{ post.title }}</h1>
-                    <p role="doc-subtitle">{{ post.subtitle }}</h2>
+                    <p role="doc-subtitle">{{ post.subtitle }}</p>
                 </header>
             {% endblock %}
 
-            <p class="article-author"><span>By</span> {{ post.author.name }} <span>&bull;</span> {{ post.post_date }}</p>
+            <p class="article-author"><span>By</span> {{ post.author.name }} <span>&bull;</span> {{ post.date }}</p>
 
             {{ post.content }}
         </section>
@@ -141,7 +141,7 @@ So there are two big concepts going on here:
 1. **Multiple Inheritance:** We’re extending **single.twig**, which itself extends **base.twig**. Thus we stay true to the [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) principle and don’t have very similar code between our two templates hanging around.
 2. **Nested Blocks:** `{% block headline %}` is located inside `{% block content %}`. So while we’re replacing the headline, we get to keep all the other markup and variables found in the parent template.
 
-What if you wanted to **add** something to the block as opposed to replace? In this case you can [`{{ parent() }}`](https://twig.symfony.com/doc/functions/parent.html) where the parent block’s content should go.
+What if you wanted to **add** something to the block as opposed to replace? In this case you can use [`{{ parent() }}`](https://twig.symfony.com/doc/functions/parent.html) where the parent block’s content should go.
 
 ```twig
 {% extends "single.twig" %}
@@ -211,20 +211,19 @@ Here’s an example from the [Twenty Twenty theme](https://github.com/WordPress/
 
 	<?php
 
-	if ( have_posts() ) {
+    if (have_posts()) {
+        while (have_posts()) {
+            the_post();
 
-		while ( have_posts() ) {
-			the_post();
+            get_template_part('template-parts/content', get_post_type());
+        }
+    }
 
-			get_template_part( 'template-parts/content', get_post_type() );
-		}
-	}
-
-	?>
+    ?>
 
 </main>
 
-<?php get_template_part( 'template-parts/footer-menus-widgets' ); ?>
+<?php get_template_part('template-parts/footer-menus-widgets'); ?>
 
 <?php get_footer(); ?>
 ```
@@ -237,19 +236,19 @@ If you wanted to introduce Timber, you could start replacing different parts of 
 <main id="site-content" role="main">
 
     <?php
-        $template = sprintf( 'content-%s.twig', get_post_type() );
-        $post     = Timber::get_post();
+        $template = sprintf('content-%s.twig', get_post_type());
+        $post = Timber::get_post();
 
         $post->setup();
 
-        Timber::render( $template, [
+        Timber::render($template, [
             'post' => $post,
-        ] );
+        ]);
     ?>
 
 </main>
 
-<?php get_template_part( 'template-parts/footer-menus-widgets' ); ?>
+<?php get_template_part('template-parts/footer-menus-widgets'); ?>
 
 <?php get_footer(); ?>
 ```

@@ -3,7 +3,7 @@ title: "Custom Fields"
 order: "600"
 ---
 
-Timber tries to make it as easy as possible for you to retrieve custom meta data for Post, Term, User and Comment objects. And it works with a range of plugins that make it easier for you to create custom fields, like Advanced Custom Fields. While most of this guide applies to everything you do with custom fields, we have separate guides in the [Integrations section](https://timber.github.io/docs/v2/integrations/).
+Timber tries to make it as easy as possible for you to retrieve custom meta data for Post, Term, User and Comment objects. And it works with a range of plugins that make it easier for you to create custom fields, like Advanced Custom Fields. While most of this guide applies to everything you do with custom fields, we have a detailed guide for [ACF](https://timber.github.io/docs/v2/integrations/advanced-custom-fields/).
 
 ## Accessing custom values
 
@@ -29,7 +29,7 @@ This method is the **recommended way to access meta values**. You’ll get value
 **PHP**
 
 ```php
-$my_custom_field = $post->meta( 'my_custom_field' );
+$my_custom_field = $post->meta('my_custom_field');
 ```
 
 ### The `raw_meta()` method
@@ -55,15 +55,17 @@ Sometimes you need to modify a meta value before it is returned. You can do that
 **PHP**
 
 ```php
-class CustomPost extends Timber\Post {
+class CustomPost extends Timber\Post
+{
     /**
      * Gets formatted price.
      */
-    public function price() {
-        $price = $this->meta( 'price' );
+    public function price()
+    {
+        $price = $this->meta('price');
 
         // Remove decimal digits.
-        return number_format( $price, 0, '', '' );
+        return number_format($price, 0, '', '');
     }
 }
 ```
@@ -86,7 +88,7 @@ If a directly accessed property or method doesn’t exist, Timber will fall back
 
 For example, when you use a custom field that you name `date` and try to get its value through `{{ post.date }}`, it won’t work. That’s because [`date`](https://timber.github.io/docs/v2/reference/timber-post/#date) is a method of the `Timber\Post` object that returns the date a post was published.
 
-In PHP, you’d access the property through `$post->date` and call the `date` method through `$post->date()`. But in Twig, you can call methods without using parentheses. And methods take precedence over properties. Timber uses a PHP technique called [Overloading](http://de.php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members) to get meta values using PHP’s [`__get` magic method](http://php.net/manual/en/language.oop5.overloading.php#object.get) on `Timber\Post`, `Timber\Term`, `Timber\User` and `Timber\Comment` objects. This means that when you use `{{ post.date }}`, it will ...
+In PHP, you’d access the property through `$post->date` and call the `date` method through `$post->date()`. But in Twig, you can call methods without using parentheses. And methods take precedence over properties. Timber uses a PHP technique called [Overloading](https://de.php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members) to get meta values using PHP’s [`__get` magic method](https://php.net/manual/en/language.oop5.overloading.php#object.get) on `Timber\Post`, `Timber\Term`, `Timber\User` and `Timber\Comment` objects. This means that when you use `{{ post.date }}`, it will ...
 
 - Check if method `date` exists. If it does, it will return what the method produces.
 - Otherwise, it will check if a property `date` exists. If it does, it will return its value.
@@ -167,17 +169,20 @@ For site options, it’s also possible to access it directly through its name:
 
 Please be aware that using this might conflict with existing Timber methods on the `Timber\Site` object. That’s why the `option()` method is the preferred way to retrieve site options.
 
+
+You cannot fetch ACF options with `site.option()`. You will need to add the fields to the context yourself. This process is described in the [ACF integration](https://timber.github.io/docs/v2/integrations/advanced-custom-fields/#options-page) documentation.
+
 ## Query by custom field value
 
-This example that uses a [WP_Query](http://codex.wordpress.org/Class_Reference/WP_Query) array shows the arguments to find all posts where a custom field called `color` has a value of `red`.
+This example that uses a [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query) array shows the arguments to find all posts where a custom field called `color` has a value of `red`.
 
 ```php
-$args = array(
-    'numberposts' => -1,
-    'post_type'   => 'post',
-    'meta_key'    => 'color',
-    'meta_value'  => 'red',
-);
+$args = [
+    'posts_per_page' => -1,
+    'post_type' => 'post',
+    'meta_key' => 'color',
+    'meta_value' => 'red',
+];
 
-$context['posts'] = Timber::get_posts( $args );
+$context['posts'] = Timber::get_posts($args);
 ```

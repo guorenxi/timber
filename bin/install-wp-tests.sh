@@ -14,6 +14,7 @@ SKIP_DB_CREATE=${6-false}
 
 TMPDIR=${TMPDIR-/tmp}
 TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
+# TMPDIR=$(realpath $TMPDIR)
 WP_TESTS_DIR=${WP_TESTS_DIR-$TMPDIR/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-$TMPDIR/wordpress}
 
@@ -64,8 +65,8 @@ install_wp() {
 	if [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
 		mkdir -p $TMPDIR/wordpress-trunk
 		rm -rf $TMPDIR/wordpress-trunk/*
-		svn export --quiet https://core.svn.wordpress.org/trunk $TMPDIR/wordpress-trunk/wordpress
-		mv $TMPDIR/wordpress-trunk/wordpress/* $WP_CORE_DIR
+		git clone --depth 1 git://develop.git.wordpress.org/ $TMPDIR/wordpress-trunk/wordpress
+		mv $TMPDIR/wordpress-trunk/wordpress/src/* $WP_CORE_DIR
 	else
 		if [ $WP_VERSION == 'latest' ]; then
 			local ARCHIVE_NAME='latest'
@@ -92,7 +93,7 @@ install_wp() {
 		tar --strip-components=1 -zxmf $TMPDIR/wordpress.tar.gz -C $WP_CORE_DIR
 	fi
 
-	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
+	download https://raw.githubusercontent.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
 }
 
 install_test_suite() {
@@ -108,8 +109,17 @@ install_test_suite() {
 		# set up testing suite
 		mkdir -p $WP_TESTS_DIR
 		rm -rf $WP_TESTS_DIR/{includes,data}
-		svn export --quiet --ignore-externals https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/includes/ $WP_TESTS_DIR/includes
-		svn export --quiet --ignore-externals https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/data/ $WP_TESTS_DIR/data
+
+		if [ $WP_VERSION == 'latest' ]; then
+			 echo "Using latest version ${LATEST_VERSION} of WordPress for testing."
+			 BRANCH=$LATEST_VERSION
+		else
+			 BRANCH=$WP_VERSION
+		fi
+		
+		git clone --depth 1 --branch $BRANCH git://develop.git.wordpress.org/ $TMPDIR/wordpress-develop/wordpress
+		cp -r $TMPDIR/wordpress-develop/wordpress/tests/phpunit/includes $WP_TESTS_DIR/includes
+		cp -r $TMPDIR/wordpress-develop/wordpress/tests/phpunit/data $WP_TESTS_DIR/data
 	fi
 
 	if [ ! -f wp-tests-config.php ]; then
@@ -176,6 +186,23 @@ install_db() {
 	fi
 }
 
+# Install WP-CLI
+install_wp_cli() {
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
+    mkdir -p $TMPDIR/wp-cli
+    mv wp-cli.phar $WP_TESTS_DIR/
+}
+
+copy_test_themes() {
+    cp -rf ./tests/assets/themes/timber-test-theme $WP_CORE_DIR/wp-content/themes/
+    cp -rf ./tests/assets/themes/timber-test-theme-child $WP_CORE_DIR/wp-content/themes/
+	 cp -rf ./tests/assets/themes/timber-test-theme-non-standard $WP_CORE_DIR/wp-content/themes/
+	 cp -rf ./tests/assets/themes/timber-test-theme-child-non-standard $WP_CORE_DIR/wp-content/themes/
+}
+
 install_wp
 install_test_suite
 install_db
+install_wp_cli
+copy_test_themes
